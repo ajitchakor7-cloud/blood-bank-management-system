@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} Donor{% endblock %}
+{% block content %}
+<h2>{{ mode }} Donor</h2>
+<form method="POST" class="form-box">
+    <label>Full Name *</label>
+    <input type="text" name="name" value="{{ donor.get('name', '') }}" required>
+    <div class="row">
+        <div><label>Age * (18-65)</label>
+            <input type="number" name="age" min="18" max="65" value="{{ donor.get('age', '') }}" required></div>
+        <div><label>Gender *</label>
+            <select name="gender" required>
+                {% for g in ['Male', 'Female', 'Other'] %}
+                <option value="{{ g }}" {{ 'selected' if donor.get('gender') == g }}>{{ g }}</option>
+                {% endfor %}
+            </select></div>
+        <div><label>Blood Group *</label>
+            <select name="blood_group" required>
+                <option value="">-- Select --</option>
+                {% for g in groups %}
+                <option value="{{ g }}" {{ 'selected' if donor.get('blood_group') == g }}>{{ g }}</option>
+                {% endfor %}
+            </select></div>
+    </div>
+    <div class="row">
+        <div><label>Phone * (10 digits)</label>
+            <input type="text" name="phone" maxlength="10" pattern="[0-9]{10}" value="{{ donor.get('phone', '') }}" required></div>
+        <div><label>Email</label>
+            <input type="email" name="email" value="{{ donor.get('email', '') }}"></div>
+    </div>
+    <label>Address</label>
+    <textarea name="address" rows="2">{{ donor.get('address', '') }}</textarea>
+    <label>Last Donation Date</label>
+    <input type="date" name="last_donation_date" value="{{ donor.get('last_donation_date', '') }}">
+    <div class="btn-row">
+        <button class="btn btn-primary">Save Donor</button>
+        <a href="{{ url_for('donor_list') }}" class="btn">Cancel</a>
+    </div>
+</form>
+{% endblock %}

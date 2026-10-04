@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}New Blood Request{% endblock %}
+{% block content %}
+<h2>New Blood Request</h2>
+<form method="POST" class="form-box">
+    <label>Hospital *</label>
+    <select name="hospital_id" required>
+        <option value="">-- Select Hospital --</option>
+        {% for h in hospitals %}<option value="{{ h._id }}">{{ h.name }} ({{ h.city }})</option>{% endfor %}
+    </select>
+    {% if not hospitals %}<p class="muted small">No hospitals yet. <a href="{{ url_for('hospital_add') }}">Add a hospital</a> first.</p>{% endif %}
+    <label>Patient Name *</label>
+    <input type="text" name="patient_name" required>
+    <div class="row">
+        <div><label>Blood Group *</label>
+            <select name="blood_group" required>
+                <option value="">-- Select --</option>
+                {% for g in groups %}<option>{{ g }}</option>{% endfor %}
+            </select></div>
+        <div><label>Units Required *</label>
+            <input type="number" name="units" min="1" required></div>
+    </div>
+    <div class="btn-row">
+        <button class="btn btn-primary">Submit Request</button>
+        <a href="{{ url_for('request_list') }}" class="btn">Cancel</a>
+    </div>
+</form>
+{% endblock %}

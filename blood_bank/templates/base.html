@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Blood Bank{% endblock %} | Blood Bank Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">🩸 Blood Bank</div>
+        <nav>
+            <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">Dashboard</a>
+            <a href="{{ url_for('donor_list') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('donor') }}">Donors</a>
+            <a href="{{ url_for('stock_view') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('stock') }}">Blood Stock</a>
+            <a href="{{ url_for('request_list') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('request') }}">Blood Requests</a>
+            <a href="{{ url_for('hospital_list') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('hospital') }}">Hospitals</a>
+            <a href="{{ url_for('search') }}" class="{{ 'active' if request.endpoint == 'search' }}">Search Blood</a>
+            <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+        </nav>
+    </aside>
+    <main class="content">
+        <header class="topbar">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <span>Logged in as <b>{{ session.get('admin') }}</b></span>
+        </header>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

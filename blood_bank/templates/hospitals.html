@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Hospitals{% endblock %}
+{% block content %}
+<div class="page-head">
+    <h2>Hospitals</h2>
+    <a href="{{ url_for('hospital_add') }}" class="btn btn-primary">+ Add Hospital</a>
+</div>
+<div class="table-wrap">
+<table>
+    <tr><th>#</th><th>Name</th><th>City</th><th>Phone</th><th>Email</th><th>Address</th><th>Actions</th></tr>
+    {% for h in hospitals %}
+    <tr>
+        <td>{{ loop.index }}</td><td>{{ h.name }}</td><td>{{ h.city }}</td><td>{{ h.phone }}</td>
+        <td>{{ h.email or '-' }}</td><td>{{ h.address }}</td>
+        <td class="actions">
+            <a href="{{ url_for('hospital_edit', id=h._id) }}" class="btn btn-small">Edit</a>
+            <form method="POST" action="{{ url_for('hospital_delete', id=h._id) }}" onsubmit="return confirm('Delete this hospital?')">
+                <button class="btn btn-small btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="center">No hospitals added yet.</td></tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} Hospital{% endblock %}
+{% block content %}
+<h2>{{ mode }} Hospital</h2>
+<form method="POST" class="form-box">
+    <label>Hospital Name *</label>
+    <input type="text" name="name" value="{{ hospital.get('name', '') }}" required>
+    <div class="row">
+        <div><label>City *</label>
+            <input type="text" name="city" value="{{ hospital.get('city', '') }}" required></div>
+        <div><label>Phone * (10 digits)</label>
+            <input type="text" name="phone" maxlength="10" pattern="[0-9]{10}" value="{{ hospital.get('phone', '') }}" required></div>
+    </div>
+    <label>Email</label>
+    <input type="email" name="email" value="{{ hospital.get('email', '') }}">
+    <label>Address</label>
+    <textarea name="address" rows="2">{{ hospital.get('address', '') }}</textarea>
+    <div class="btn-row">
+        <button class="btn btn-primary">Save Hospital</button>
+        <a href="{{ url_for('hospital_list') }}" class="btn">Cancel</a>
+    </div>
+</form>
+{% endblock %}

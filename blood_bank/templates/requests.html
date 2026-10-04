@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Blood Requests{% endblock %}
+{% block content %}
+<div class="page-head">
+    <h2>Blood Requests</h2>
+    <a href="{{ url_for('request_add') }}" class="btn btn-primary">+ New Request</a>
+</div>
+<form method="GET" class="search-bar">
+    <select name="status" onchange="this.form.submit()">
+        <option value="">All Statuses</option>
+        {% for s in ['Pending', 'Approved', 'Issued', 'Rejected'] %}
+        <option value="{{ s }}" {{ 'selected' if status == s }}>{{ s }}</option>
+        {% endfor %}
+    </select>
+</form>
+<div class="table-wrap">
+<table>
+    <tr><th>#</th><th>Patient</th><th>Hospital</th><th>Blood</th><th>Units</th><th>Status</th><th>Date</th><th>Update Status</th></tr>
+    {% for r in requests %}
+    <tr>
+        <td>{{ loop.index }}</td><td>{{ r.patient_name }}</td><td>{{ r.hospital_name }}</td>
+        <td><b>{{ r.blood_group }}</b></td><td>{{ r.units }}</td>
+        <td><span class="badge {{ r.status|lower }}">{{ r.status }}</span></td>
+        <td>{{ r.request_date.strftime('%d-%m-%Y') }}</td>
+        <td class="actions">
+            {% if r.status == 'Pending' %}
+                <form method="POST" action="{{ url_for('request_action', id=r._id, action='approve') }}"><button class="btn btn-small btn-ok">Approve</button></form>
+                <form method="POST" action="{{ url_for('request_action', id=r._id, action='reject') }}" onsubmit="return confirm('Reject this request?')"><button class="btn btn-small btn-danger">Reject</button></form>
+            {% elif r.status == 'Approved' %}
+                <form method="POST" action="{{ url_for('request_action', id=r._id, action='issue') }}" onsubmit="return confirm('Issue blood? Stock will decrease.')"><button class="btn btn-small btn-primary">Issue Blood</button></form>
+                <form method="POST" action="{{ url_for('request_action', id=r._id, action='reject') }}" onsubmit="return confirm('Reject this request?')"><button class="btn btn-small btn-danger">Reject</button></form>
+            {% else %}-{% endif %}
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="8" class="center">No requests found.</td></tr>
+    {% endfor %}
+</table>
+</div>
+<p class="muted small">Flow: Pending → Approved → Issued (stock decreases on Issue). A request can be Rejected before it is issued.</p>
+{% endblock %}

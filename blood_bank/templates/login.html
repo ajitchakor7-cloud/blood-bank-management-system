@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Login | Blood Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+    <div class="login-box">
+        <h1>🩸 Blood Bank</h1>
+        <p class="muted">Management System - Admin Login</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        <form method="POST" onsubmit="return validateLogin()">
+            <label>Username</label>
+            <input type="text" name="username" id="username" placeholder="Enter username" autofocus>
+            <label>Password</label>
+            <input type="password" name="password" id="password" placeholder="Enter password">
+            <button type="submit" class="btn btn-primary full">Login</button>
+        </form>
+        <p class="muted small">Default: admin / admin123</p>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Blood Stock{% endblock %}
+{% block content %}
+<h2>Blood Stock</h2>
+<div class="two-col">
+    <form method="POST" action="{{ url_for('stock_add') }}" class="form-box">
+        <h3>Add Blood Units</h3>
+        <p class="muted small">Adds to the existing stock.</p>
+        <label>Blood Group</label>
+        <select name="blood_group" required>
+            {% for g in groups %}<option>{{ g }}</option>{% endfor %}
+        </select>
+        <label>Units to Add</label>
+        <input type="number" name="units" min="1" required>
+        <button class="btn btn-primary">Add to Stock</button>
+    </form>
+    <form method="POST" action="{{ url_for('stock_update') }}" class="form-box">
+        <h3>Update Blood Units</h3>
+        <p class="muted small">Sets the stock to an exact number (for corrections).</p>
+        <label>Blood Group</label>
+        <select name="blood_group" required>
+            {% for g in groups %}<option>{{ g }}</option>{% endfor %}
+        </select>
+        <label>New Total Units</label>
+        <input type="number" name="units" min="0" required>
+        <button class="btn btn-primary">Update Stock</button>
+    </form>
+</div>
+<h3>Available Stock</h3>
+<table>
+    <tr><th>Blood Group</th><th>Units Available</th><th>Status</th><th>Last Updated</th></tr>
+    {% for s in stock %}
+    <tr>
+        <td><b>{{ s.blood_group }}</b></td><td>{{ s.units }}</td>
+        <td>{% if s.units == 0 %}<span class="badge rejected">Out of stock</span>
+            {% elif s.units < 5 %}<span class="badge pending">Low</span>
+            {% else %}<span class="badge approved">Available</span>{% endif %}</td>
+        <td>{{ s.last_updated.strftime('%d-%m-%Y %H:%M') }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

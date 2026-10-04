@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Search Blood{% endblock %}
+{% block content %}
+<h2>Blood Availability Search</h2>
+<form method="GET" class="search-bar">
+    <select name="blood_group" required>
+        <option value="">-- Select Blood Group --</option>
+        {% for g in groups %}<option value="{{ g }}" {{ 'selected' if g == group }}>{{ g }}</option>{% endfor %}
+    </select>
+    <button class="btn btn-primary">Check Availability</button>
+</form>
+{% if stock %}
+    <div class="result {{ 'available' if stock.units > 0 else 'unavailable' }}">
+        <b>{{ stock.blood_group }}</b>:
+        {% if stock.units > 0 %}{{ stock.units }} unit(s) available{% else %}Not available right now{% endif %}
+    </div>
+    <h3>Registered Donors with {{ group }}</h3>
+    <table>
+        <tr><th>Name</th><th>Phone</th><th>Address</th><th>Last Donation</th></tr>
+        {% for d in donors %}
+        <tr><td>{{ d.name }}</td><td>{{ d.phone }}</td><td>{{ d.address }}</td><td>{{ d.last_donation_date or '-' }}</td></tr>
+        {% else %}
+        <tr><td colspan="4" class="center">No donors with this blood group.</td></tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% endblock %}
