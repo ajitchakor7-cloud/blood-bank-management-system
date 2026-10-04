@@ -1,12 +1,16 @@
 # database.py
 # Connects to MongoDB and prepares the 5 collections (tables)
 
+import os
 from datetime import datetime
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash
 
 # ---------- 1. CONNECTION ----------
-MONGO_URI = "mongodb://localhost:27017/"
+import os
+from pymongo import MongoClient
+
+MONGO_URI = os.environ.get("MONGODB_URI", "mongodb://localhost:27017/")
 DB_NAME = "blood_bank_db"
 
 client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=3000)
